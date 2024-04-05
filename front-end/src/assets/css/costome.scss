@@ -1,0 +1,23 @@
+.box{
+    padding: 2rem;
+    border: 1px solid lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    background-color: rgb(36, 36, 43);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition-duration: .4s;
+    border-radius: .3rem;
+    margin-bottom: $gap*2;
+    &:hover{
+        background-color: rgb(24, 24, 44);
+        transition-duration: .4s;
+        letter-spacing: .8rem;
+        border-radius: 5rem;
+        box-shadow: 2px 2px 5px rgb(24, 24, 44);
+        border: 1px solid rgb(24, 24, 44);
+    }
+}

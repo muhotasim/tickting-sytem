@@ -1,0 +1,101 @@
+// topbar
+.top-bar {
+    background-color: var(--primary-color);
+    border-bottom: .2rem solid var(--primary-color-darken);
+    z-index: 9999;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 4.9rem;
+    box-shadow: 0 0.1rem 0.2rem var(--primary-color-darken);
+    .menu-details{
+        position: absolute;
+        z-index: 9999;
+        width: 30rem;
+        left: -25rem;
+        top: 3.5rem;
+        max-height: 0;
+        border-radius: .3rem;
+        overflow: hidden;
+        transition: all 0.6s ease;
+        background: var(--primary-color);
+        box-shadow: .2rem .2rem .5rem var(--dark-font-color);
+        ul{
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        &.open-menu{
+            max-height: 100rem;
+            transition: all 0.6s ease;
+            
+        }
+        .user__details{
+                        
+            padding: 1rem;
+            text-align: center;
+            .img{
+                height: 8rem;
+                width: 8rem;
+                border-radius: 50%;
+                margin: 2rem auto;
+                border: .2rem solid var(--primary-color-darken);
+            }
+            .actions{
+                display: flex;
+                gap: 2rem;
+                button{
+                    display: block;
+                    width: 100%;
+                    font-size: 1.2rem;
+                }
+            }
+        }
+        ul{
+            display: block;
+            padding: 0;
+            li{
+                &.see-all-menu{
+                    text-align: center;
+                }
+                
+                a{
+                    display: block;
+                    padding: .8rem 1.5rem .8rem 1.5rem;
+                    line-height: 2.4rem;
+                    transition-duration: .4s;
+                    border-bottom: .1rem solid var(--sidebar-submenu-back);
+                    &:hover{
+                        transition-duration: .4s;
+                        background: var(--primary-color-highlight);
+                    }
+                }
+            }
+        }
+    }
+}
+a.topbar-brand,a.topbar-toggle{
+    float: left;
+    line-height: 1.6rem;
+    font-size: 1.4rem;
+    padding: 1.5rem 2rem;
+    color: var(--light-font-color);
+    cursor: pointer;
+}
+.top-bar ul{
+    display: flex;
+    justify-content: flex-end;
+    gap: 3rem;
+    list-style: none;
+    padding: 1.5rem 2rem;
+    margin: 0 auto;
+}
+.top-bar ul li{
+    position: relative;
+}
+.top-bar ul li a{
+    color: var(--light-font-color);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1.6rem;    
+}

@@ -1,0 +1,17 @@
+.no-data-found-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    align-content: center;
+    .content{
+        text-align: center;
+        margin: 0 auto;
+        max-width: 40rem;
+    }
+    h1{
+        font-size: 3.5rem;
+        font-weight: 400;
+        text-align: center;
+    }
+}

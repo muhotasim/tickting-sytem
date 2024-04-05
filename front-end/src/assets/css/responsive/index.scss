@@ -1,0 +1,19 @@
+@media screen and (max-width: 738px) {
+    .app__container.collaspe{
+        margin-left: 0;
+    }
+    .sidebar__container{
+        z-index: 999;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    html {
+        font-size: 9px;
+    }
+}
+@media screen and (max-width: 280px) {
+    html {
+        font-size: 7px;
+    }
+}

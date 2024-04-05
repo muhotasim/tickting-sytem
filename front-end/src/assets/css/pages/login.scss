@@ -1,0 +1,24 @@
+.page.login-page {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background:var(--login-background);
+}
+.login__container {
+    width: 80%;
+    max-width: 40rem;
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: var(--login-container);
+    transform: translate(-50%, -50%);
+    border: .1rem solid var(--primary-color-darken);
+    border-radius: .8rem;
+    transition-duration: .4s;
+    .action-success{
+        font-weight: 600;
+        padding-bottom: 2rem;
+        font-size: 1.6rem;
+    }
+}

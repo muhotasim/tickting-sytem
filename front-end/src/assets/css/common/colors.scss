@@ -1,0 +1,23 @@
+@mixin colors{
+    --primary-color:  #0A558C;
+    --primary-color-highlight: #2680C2;
+    --primary-color-darken: #003E6B;
+
+    --light-font-color: #fff;
+    --dark-font-color: #000;
+    --link-color: #1565C0;
+
+    --input-border-color: lightgray;
+
+    --sidebar-submenu-back: #0d568c;
+    --login-background: linear-gradient( #0552B5, #0967D2);
+    --login-container: #fff;
+
+    --page-background: #f4faff;
+
+    --validation-error-border: #ff2f00;
+    --validation-error-box-shadow: #ff2f0047;
+}
+:root{
+   @include colors;
+}

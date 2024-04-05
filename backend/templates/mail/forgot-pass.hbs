@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <style>
+        body{
+            font-family: sans-serif;
+        }
+        h1{
+            font-size: 36px;
+            text-align: center;
+            font-weight: 800;
+        }
+        p{
+            font-size: 16px;
+            letter-spacing: .5px;
+            text-align: center;
+            padding: 15px 0;
+            margin: 15px 0;
+        }
+        a{
+            display: block;
+            background-color: #ff3f55;
+            padding: 15px 25px;
+            font-size: 22px;
+            line-height: 1.4;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 0 auto;
+            color: #fff;
+            max-width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Password Reset</h1>
+    <p>Dear {{name}},</p>
+    <p>We received a request to reset your password. To proceed, please click the button below:</p>
+    <p><a href="{{link}}">Reset Password</a></p>
+    <p>If you didn't request this, you can safely ignore this email. Your account security is important to us.</p>
+    <p>Please note that this reset link will expire in 10 minutes for security reasons.</p>
+</body>
+</html>

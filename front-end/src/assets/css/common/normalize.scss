@@ -1,0 +1,26 @@
+html{
+    font-size: 10px;
+}
+
+body{
+    font-family: 'lato','roboto',sans-serif;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+p{
+    font-size: 1.6rem;
+}
+a,a:active,a:visited{
+    text-decoration: none;
+    color: var(--dark-font-color);
+}
+@for $i from 5 through 1 {
+    h#{$i} {
+        font-size: 4rem - $i * .35rem;
+        letter-spacing: .125rem;
+    }
+}

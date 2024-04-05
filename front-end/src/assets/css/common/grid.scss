@@ -1,0 +1,51 @@
+$grid-columns: 12;
+$gap: 1.5rem;
+$breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
+);
+
+.row {
+    &::after {
+        clear: both;
+        display: table;
+        content: '';
+    }
+    margin-left: -$gap;
+    margin-right: -$gap;
+}
+
+
+.col {
+    @each $breakpoint, $value in $breakpoints {
+        @for $i from 1 to $grid-columns {
+            &-#{$breakpoint}-#{$i} {
+                width: percentage(calc($i/$grid-columns));
+                float: left;
+                padding: 0 $gap;
+            }
+        }
+
+    }
+    @each $breakpoint, $value in $breakpoints {
+        @media screen and (min-width: $value ) {
+            @for $i from 1 to $grid-columns {
+
+                @each $otherBreakPoint, $valueOther in $breakpoints {
+                    @if $otherBreakPoint !=$breakpoint {
+                        &-#{$otherBreakPoint}-#{$i} {
+                            width: 100%;
+                        }
+                    }
+                }
+
+                &-#{$breakpoint}-#{$i} {
+                    width: percentage(calc($i/$grid-columns)) !important;
+                }
+            }
+        }
+    }
+}

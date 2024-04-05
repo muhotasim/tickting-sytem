@@ -1,0 +1,7 @@
+/backend/dist
+/backend/node_modules
+/backend/build
+
+/front-end/node_modules
+/front-end/dist
+/front-end/dist-ssr

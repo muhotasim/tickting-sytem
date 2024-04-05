@@ -1,0 +1,96 @@
+.data-table{
+    display: block;
+    // max-width: 100%;
+    // overflow-x: auto;
+    .table-container{
+        width: 100%;
+        overflow-x: auto;
+    }
+    table{
+        border-spacing: 0;
+        width: 100%;
+        background-color: inherit;
+        border-radius: .3rem;
+        position: relative;
+        tr{
+            background-color: white;
+            &:nth-child(even){
+                background-color: #f2f2f2;
+            }
+            .table-loader__holder{
+                text-align: center;
+                animation: animate-fade-in 0.4s ease-in;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-content: center;
+                justify-content: center;
+                align-self: center;
+                background: rgba(250,250,250,.5);
+            }
+            th,td{
+                text-align: left;
+                padding: .5rem 1rem;
+                font-size: 1.4rem;
+                margin: 0;
+                line-height: 2.5rem;
+            }
+            
+            th{
+                font-weight: bolder;
+                font-size: 1.5rem;
+                background-color: var(--primary-color);
+                color: var(--light-font-color);
+            }
+
+            td{
+                animation: animate-fade-in .6s ease-in;
+                font-family: system-ui, -apple-system, 'roboto', 'lato', sans-serif;
+            }
+            
+        }
+    }
+    .pagination{
+        padding: 1.5rem 0;
+        .page-numbers{
+            display: flex;
+            li{
+                list-style: none;
+                border-radius: .3rem;
+                
+                button{
+                    min-width: 3rem;
+                    padding: .6rem .8rem;
+                    border: .1rem solid var(--primary-color);
+                    background-color: transparent;
+                    border-right: none;
+                    cursor: pointer;
+                    &:disabled{
+                        opacity: .6;
+                        cursor: not-allowed;
+                    }
+                }
+                &:first-child button{
+                    border-top-left-radius: .3rem;
+                    border-bottom-left-radius: .3rem;
+                }
+                &.active button{
+                    background-color: var(--primary-color);
+                    color: var(--light-font-color);
+                }
+                &:last-child button{
+                    border-top-right-radius: .3rem;
+                    border-bottom-right-radius: .3rem;
+                    border-right: .1rem solid var(--primary-color);
+                }
+                &:first-child, &:last-child{
+                    // background-color: var(--primary-color);
+                    button{
+                        color: var(--dark-font-color);
+                    }
+                }
+            }
+        }
+    }
+}

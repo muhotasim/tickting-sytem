@@ -1,0 +1,40 @@
+$sidebar-width : 22rem;
+.base__container{
+    display: flex;
+    position: relative;
+}
+.sidebar__container{
+    width: $sidebar-width;
+    position: fixed;
+    top: 4.8rem;
+    left: 0;
+    z-index: 1;
+    background-color: var(--primary-color);
+    height: 100%;
+    width: $sidebar-width;
+    animation: animate-slide-right .4s linear;
+    animation-fill-mode: forwards;
+    box-shadow: 0 .2rem .6rem var(--primary-color-darken);
+    
+}
+.sidebar__container.collaspe{
+    animation: animate-slide-left .4s ease-in;
+    animation-fill-mode: forwards;
+}
+.app__container.collaspe{
+    margin-left: $sidebar-width;
+    transition-duration: .8s;
+}
+.app__container{
+    flex: 1;
+    flex-grow: 1;
+    display: block;
+    width: 100%;
+}
+.app__container .container{
+    margin: 6.8rem 2rem 0 2rem;
+    min-height: 100vh;
+    padding: 1rem;
+    max-width: 100%;
+    // overflow-x: auto;
+}
