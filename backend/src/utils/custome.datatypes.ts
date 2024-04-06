@@ -47,3 +47,14 @@ export enum TicketStatus{
     reopened = 'Reopened',
     cancelled = 'Cancelled',
 }
+export interface TicketInterface {
+    title: string;
+    details: string;
+    priority: TicketPriority;
+    status: TicketStatus;
+    submission_date: Date|string;
+    resolved_date: Date|string;
+    submited_by: number;
+
+    rating: number;
+}
