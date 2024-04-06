@@ -65,14 +65,20 @@ export class TicketService{
         ticket.assigned_to = assignedUser;
         return await this._m_Ticket.save(ticket)
     }
-    async makeComment({ticket_id, commented_by, comment}){
+    async makeComment({ticket_id, commented_by, comment, parent_id}:{ticket_id:number, commented_by:number, comment: string, parent_id:any}){
         const commentBy:User = await this.userService.findById(commented_by);
         const ticket = await this._m_Ticket.findOne({where: {id: ticket_id}})
-        const savedComment = await this._m_Comment.create({
+        const crData:any = {
             comment: comment,
             ticket: ticket,
-            user: commentBy
-        })
+            user: commentBy,
+        }
+        if(parent_id){
+            let parentComment = new Comment();
+            parentComment.id = parent_id;
+            crData.parent = parentComment;
+        }
+        const savedComment = await this._m_Comment.create(crData)
         return await this._m_Comment.save(savedComment)
     }
     async getComment({ticket_id, page = 1, perPage = 10}:{ticket_id:number, page:number, perPage:number}){

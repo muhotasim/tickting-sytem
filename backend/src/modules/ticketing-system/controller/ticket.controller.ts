@@ -54,9 +54,9 @@ export class TicketController {
 
 
     @Post('comment')
-    async comment(@Body() body: { ticket_id: number, comment: string }, @User() user) {
+    async comment(@Body() body: { ticket_id: number, comment: string, parent_id: number }, @User() user) {
         try {
-            const data = await this.ticketService.makeComment({ ticket_id: body.ticket_id, comment: body.comment, commented_by: user.id })
+            const data = await this.ticketService.makeComment({ ticket_id: body.ticket_id, parent_id: body.parent_id, comment: body.comment, commented_by: user.id })
             return successResponse(data, "");
 
         } catch (e) {

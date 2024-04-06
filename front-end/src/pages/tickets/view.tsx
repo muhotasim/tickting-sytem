@@ -45,12 +45,25 @@ const ViewTicket = () => {
     const makeComment = async () => {
 
         const apiHandler = new TicketApiService(appConst.API_URL);
-        const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: commentText })
+        const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: commentText, parent_id: undefined })
         if (responseCommentResponse.type == ResponseType.success) {
             setCommentText('');
             const commentsResponse = await apiHandler.comments(Number(id));
             if (commentsResponse.type == ResponseType.success) {
                 console.log(commentsResponse)
+                setComments(commentsResponse.data);
+            }
+        }
+    }
+    const makeChildComment = async (parentId: number, comment: string) => {
+
+        const apiHandler = new TicketApiService(appConst.API_URL);
+        const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: comment, parent_id: parentId })
+        if (responseCommentResponse.type == ResponseType.success) {
+            setCommentText('');
+            const commentsResponse = await apiHandler.comments(Number(id));
+            if (commentsResponse.type == ResponseType.success) {
+
                 setComments(commentsResponse.data);
             }
         }
@@ -97,39 +110,62 @@ const ViewTicket = () => {
 
             <div >
                 <h5 className="mt-15">Comments</h5>
+
+                <div className="row">
+                    <div className="col-md-6">
+                        <ul className="comments-holder">
+                            {comments.map((comment: any, index) => {
+                                return <Comment key={index} comment={comment} makeChildComment={makeChildComment} />
+                            })}
+                        </ul>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-md-6">
                         <textarea className="input" value={commentText} onChange={e => setCommentText(e.target.value)}></textarea>
                         <button className="btn btn-md btn-primary float-right" onClick={makeComment}> Comment</button>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <ul className="comments-holder">
-                            {comments.map((comment:any, index) => {
-                                return <li className="comment" key={index}>
-                                    <p className="user-name">{comment.user.name}</p>
-                                    <p className="text-small mb-5 date-text">{moment(comment.created_at).format('LLLL')}</p>
-                                    <p className="comment-text">{comment.comment}</p>
-
-                                    <ul className="sub-comment-holder">
-                                        {comment.comments.map((childComment:any, indexChild:number) => {
-                                            return <li className="comment" key={index + '-' + indexChild}>
-                                                <p className="user-name">{childComment.user.name}</p>
-                                                <p className="text-small mb-5 date-text">{moment(childComment.created_at).format('LLLL')}</p>
-                                                <p className="comment-text">{childComment.comment}</p>
-                                            </li>
-                                        })}
-                                    </ul>
-
-                                </li>
-                            })}
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+}
+
+const Comment = ({ comment, makeComment, makeChildComment }: any) => {
+    const [reply, setReply] = useState(false);
+    const [commentText, setCommentText] = useState('');
+    const toggleReply = () => {
+        console.log(!reply)
+        setReply(!reply)
+    }
+    return <li className="comment">
+        <p className="user-name">{comment?.user?.name ?? ''}</p>
+        <p className="text-small mb-5 date-text">{moment(comment.created_at).format('LLLL')}</p>
+        <p className="comment-text">{comment.comment}</p>
+        <p className="text-link mb-5" style={{ cursor: 'pointer' }} onClick={toggleReply}>reply</p>
+
+        {comment.comments.length > 0 ? <ul className="sub-comment-holder ml-15">
+            {comment.comments.map((childComment: any, indexChild: number) => {
+                return <li className="comment" key={indexChild}>
+                    <p className="user-name">{childComment?.user?.name ?? ''}</p>
+                    <p className="text-small mb-5 date-text">{moment(childComment.created_at).format('LLLL')}</p>
+                    <p className="comment-text">{childComment.comment}</p>
+                    <p className="text-link mb-5" style={{ cursor: 'pointer' }} onClick={toggleReply}>reply</p>
+                </li>
+            })}
+        </ul> : null}
+        {reply ? <div>
+            <div>
+                <textarea className="input" value={commentText} onChange={e => setCommentText(e.target.value)}></textarea>
+                <button className="btn btn-md btn-primary float-right" onClick={async () => {
+                    await makeChildComment(comment.id, commentText)
+                    setCommentText('')
+                    setReply(false)
+                }}> Comment</button>
+            </div>
+        </div> : null}
+
+    </li>
 }
 
 export default ViewTicket;
