@@ -83,7 +83,7 @@ export class AuthController {
                     refresh_token: refreshToken,
                     user: user
                 });
-                await this._tokenService.update(tokenId, { ac_token_expires_at: new Date().getTime(), rf_token_expires_at: new Date().getTime() });
+                // await this._tokenService.update(tokenId, { ac_token_expires_at: new Date().getTime(), rf_token_expires_at: new Date().getTime() });
                 const data = await this._tokenService.findById(savedToken.id);
                 return successResponse(data, messagesConst['en'].tokenRefreshed)
             } else {

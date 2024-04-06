@@ -4,8 +4,9 @@ import { Comment } from "src/models/comment.model";
 import { TicketAttachments } from "src/models/ticket-attachment.model";
 import { Ticket } from "src/models/ticket.model";
 import { User } from "src/models/user.model";
+import { NotificationService } from "src/modules/common/services/notification.service";
 import { UserService } from "src/modules/common/services/user.service";
-import { TicketInterface, TicketStatus } from "src/utils/custome.datatypes";
+import { NotificationStatus, NotificationType, TicketInterface, TicketStatus } from "src/utils/custome.datatypes";
 import { FindManyOptions, IsNull, Repository } from "typeorm";
 
 @Injectable()
@@ -14,7 +15,8 @@ export class TicketService{
         @InjectRepository(Ticket) private readonly _m_Ticket:Repository<Ticket>,
         @InjectRepository(TicketAttachments) private readonly _m_TicketAttachments:Repository<TicketAttachments>,
         @InjectRepository(Comment) private readonly _m_Comment:Repository<Comment>,
-        private readonly userService:UserService
+        private readonly userService:UserService,
+        private readonly notificationService: NotificationService
 
     ){}
 
@@ -25,6 +27,7 @@ export class TicketService{
         const options: FindManyOptions<Ticket> = {
             take: perPage,
             skip: perPage * (page - 1),
+            order: {id: 'DESC'}
         };
         const [data, total] = await this._m_Ticket
             .findAndCount(options);
@@ -41,6 +44,12 @@ export class TicketService{
             submited_by: submitedUser,
         })
         const ticketData = await this._m_Ticket.save(ticket)
+        const users = await this.userService.findAll();
+        let notifications = [];
+        for(let user of users){
+            notifications.push({type: NotificationType.app,message: 'New Ticket Opened',timestamp:new Date(), status: NotificationStatus.unread, user: user, link: `/tickets-management/tickets/${ticket.id}` })
+        }
+        await this.notificationService.createBatchNotification(notifications);
         return ticketData;
 
     }

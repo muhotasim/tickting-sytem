@@ -23,6 +23,7 @@ export class NotificationService {
         const options: FindManyOptions<Notification> = {
             take: perPage,
             skip: perPage * (page - 1),
+            order: {id: 'desc'}
         };
         if (filterParams ) {
             options.where = {};

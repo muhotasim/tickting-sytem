@@ -45,7 +45,7 @@ const TopBar:React.FC<{toggle:()=>void}> = ({ toggle })=>{
                     <div className={"menu-details "+(openNotification?'open-menu': '')}>
                         <ul>
                             {notifications.slice(0, 5).map((notification, index)=>{
-                                return <li key={index}><a href="">{notification.message}</a></li>
+                                return <li key={index}><Link to={notification.link}>{notification.message}</Link></li>
                             })}
                             <li className="see-all-menu"><Link to='/notifications' onClick={()=>toggleNotification()}>See All</Link></li>
                         </ul>
