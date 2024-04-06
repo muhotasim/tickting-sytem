@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { TicketService } from "../service/ticket.service";
 import { User, errorResponse, successResponse } from "src/utils/common.functions";
 import { GlobalService } from "src/modules/common/services/global.service";
@@ -26,16 +26,21 @@ export class TicketController{
     @Post()
     async submitTicket(@User() userInfo, @Body() body: CreateTicketDTO){
         try {
-            const gridData = this.globalService.getGlobalData('tickets');
             const ticketData:any = {...body};
             ticketData.status = TicketStatus.open;
             ticketData.submission_date = new Date();
             ticketData.submited_by = userInfo.id;
             const ticket = await this.ticketService.submitTicket(ticketData);
-            return successResponse(ticket, messagesConst['en'].controller.tickets.index, gridData);
+            return successResponse(ticket, messagesConst['en'].controller.tickets.index);
         } catch (e) {
             return errorResponse(e);
         }
     }
+
+    @Patch('assign/:id')
+    async asyncTicket (@Param('id') id:number,@Body('assign_to') assign_to:number){
+        return await this.ticketService.assignTicket({ticket_id: id, assigned_id: assign_to});
+    }
+
     
 }
