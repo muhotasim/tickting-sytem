@@ -14,6 +14,10 @@ const messagesConst = {
         passwordChangeSuccess: "Password has been changed successfully",
         passwordDoesNotMatch: "Password does not match",
         controller: {
+            tickets: {
+
+                index: "Tickets has been fetched successfully.",
+            },
             permission: {
                 index: "Permissions has been fetched successfully.",
                 all: "Permissions has been fetched successfully.",

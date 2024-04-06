@@ -34,9 +34,7 @@ export class TicketService{
             priority: data.priority,
             status: data.status,
             submission_date: data.submission_date,
-            resolved_date: data.resolved_date,
             submited_by: submitedUser,
-            rating: data.rating,
         })
         const ticketData = await this._m_Ticket.save(ticket)
         return ticketData;
