@@ -9,6 +9,7 @@ import { RootState } from "../../store";
 import { TicketApiService } from "../../services/tickets-api.service";
 import appConst from "../../constants/app.const";
 import moment from "moment";
+import Loader from "../../components/loading";
 
 
 const ViewTicket = () => {
@@ -16,122 +17,81 @@ const ViewTicket = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [commentText, setCommentText] = useState('')
-    const { isLoading } = useSelector((state: RootState) => state.tickets)
-    const [comments, setComments] = useState([
-        {
-            "id": 1,
-            "comment": "test",
-            "created_at": null,
-            "updated_at": "2024-04-06T14:16:22.834Z",
-            "comments": [{
-                "id": 2,
-                "comment": "test 2",
-                "created_at": null,
-                "updated_at": "2024-04-06T14:16:31.877Z"
-            }]
-        },
+    const {isLoading, title, details, priority, status,submission_date, comments, isCommentLoading} = useSelector((state: RootState) => state.tickets.ticketDetails)
 
-    ])
-    const [ticketData, setTicketData] = useState({
-        priority: '',
-        details: '',
-        rating: 0,
-        resolved_date: null,
-        status: '',
-        submission_date: null,
-        title: ''
-    })
+    const markAsResolved = async () => {
+        const apiHandler = new TicketApiService(appConst.API_URL);
+        const resolveResponse = await apiHandler.resolveTicket(Number(id))
+        if (resolveResponse.type == ResponseType.success) {
+            ticketsActions.ticketDetails(Number(id))(dispatch)
+        }
+    }
 
     const makeComment = async () => {
-
         const apiHandler = new TicketApiService(appConst.API_URL);
         const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: commentText, parent_id: undefined })
         if (responseCommentResponse.type == ResponseType.success) {
             setCommentText('');
-            const commentsResponse = await apiHandler.comments(Number(id));
-            if (commentsResponse.type == ResponseType.success) {
-                console.log(commentsResponse)
-                setComments(commentsResponse.data);
-            }
+            ticketsActions.getComments(Number(id))(dispatch)
         }
     }
     const makeChildComment = async (parentId: number, comment: string) => {
-
         const apiHandler = new TicketApiService(appConst.API_URL);
         const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: comment, parent_id: parentId })
         if (responseCommentResponse.type == ResponseType.success) {
-            setCommentText('');
-            const commentsResponse = await apiHandler.comments(Number(id));
-            if (commentsResponse.type == ResponseType.success) {
-
-                setComments(commentsResponse.data);
-            }
-        }
-    }
-    const fetchData = async () => {
-        const apiHandler = new TicketApiService(appConst.API_URL);
-        const ticketId = Number(id);
-        const response = await apiHandler.getById(ticketId);
-        if (response.type == ResponseType.success) {
-            setTicketData({
-                priority: response.data.priority,
-                details: response.data.details,
-                rating: response.data.rating,
-                resolved_date: response.data.resolved_date,
-                status: response.data.status,
-                submission_date: response.data.submission_date,
-                title: response.data.title
-            })
-            const commentsResponse = await apiHandler.comments(ticketId);
-            if (commentsResponse.type == ResponseType.success) {
-                console.log(commentsResponse)
-                setComments(commentsResponse.data);
-            }
+            ticketsActions.getComments(Number(id))(dispatch)
         }
     }
 
 
     useEffect(() => {
-        fetchData();
+        ticketsActions.ticketDetails(Number(id))(dispatch)
     }, [])
     return <div className='page dashboard-page animate-fade-in'>
-        <h2 className="mt-15 mb-15">Ticket {id} </h2>
-
+        {isLoading&&<p className="text-center"><i className="fa fa-sync fa-spin"></i> please wait</p>}
+        <div style={{opacity:isLoading?0:1}}>
+        <div className="row">
+            <div className="col-md-6">
+                <h2 className="mt-15 mb-15">Ticket #{id} <span className="btn mb-15 float-right" style={{ fontSize: '16px' }}>{status}</span></h2>
+            </div> </div>
         <div className="ticket-details">
             <div className="row">
                 <div className="col-md-6">
-                    <span className="btn btn-primary btn-lg float-right mb-15" style={{ fontSize: '16px' }}>{ticketData.priority}</span>
-
                     <p className="clearfix"></p>
-                    <h4 className="mb-15">{ticketData.title}</h4>
-                    <p>{ticketData.details}</p>
+                    <h4 className="mb-15">{title}</h4>
+                    <div className="mb-20 pb-20">
+                    <span className="btn mb-15 mt-15" style={{ fontSize: '16px' }}>{priority}</span>
+                    {status!='Resolved'&&<button className="btn btn-sm btn-primary float-right ml-5 mb-5" style={{ fontSize: '16px' }} onClick={() => { markAsResolved() }}>Resolve</button>}
+                    <p className="clearfix"></p>
+                    </div>
+                    <p className="clearfix"></p>
+                    <p>{details} </p>
                 </div>
             </div>
-
-            <div >
+            {isCommentLoading?<p className="text-center"><i className="fa fa-sync fa-spin"></i> please wait</p>:<div >
                 <h5 className="mt-15">Comments</h5>
-
                 <div className="row">
                     <div className="col-md-6">
                         <ul className="comments-holder">
                             {comments.map((comment: any, index) => {
-                                return <Comment key={index} comment={comment} makeChildComment={makeChildComment} />
+                                return <Comment status={status} key={index} comment={comment} makeChildComment={makeChildComment} />
                             })}
                         </ul>
                     </div>
                 </div>
-                <div className="row">
+                {status!='Resolved'&&<div className="row">
                     <div className="col-md-6">
                         <textarea className="input" value={commentText} onChange={e => setCommentText(e.target.value)}></textarea>
-                        <button className="btn btn-md btn-primary float-right" onClick={makeComment}> Comment</button>
+                        <button className="btn btn-md btn-primary float-right mt-10" onClick={makeComment}> Comment</button>
                     </div>
-                </div>
-            </div>
+                </div>}
+            </div>}
+        </div>
         </div>
     </div>
 }
 
-const Comment = ({ comment, makeComment, makeChildComment }: any) => {
+const Comment = ({ comment, makeChildComment, status }: any) => {
     const [reply, setReply] = useState(false);
     const [commentText, setCommentText] = useState('');
     const toggleReply = () => {
@@ -142,26 +102,26 @@ const Comment = ({ comment, makeComment, makeChildComment }: any) => {
         <p className="user-name">{comment?.user?.name ?? ''}</p>
         <p className="text-small mb-5 date-text">{moment(comment.created_at).format('LLLL')}</p>
         <p className="comment-text">{comment.comment}</p>
-        <p className="text-link mb-5" style={{ cursor: 'pointer' }} onClick={toggleReply}>reply</p>
+        {status!='Resolved'&&<p className="text-link mb-5 float-right" style={{ cursor: 'pointer' }} onClick={toggleReply}>reply</p>}
 
-        {comment.comments.length > 0 ? <ul className="sub-comment-holder ml-15">
+        {comment.comments.length > 0 ? <ul className="sub-comment-holder ml-20 mt-15">
             {comment.comments.map((childComment: any, indexChild: number) => {
                 return <li className="comment" key={indexChild}>
                     <p className="user-name">{childComment?.user?.name ?? ''}</p>
                     <p className="text-small mb-5 date-text">{moment(childComment.created_at).format('LLLL')}</p>
                     <p className="comment-text">{childComment.comment}</p>
-                    <p className="text-link mb-5" style={{ cursor: 'pointer' }} onClick={toggleReply}>reply</p>
                 </li>
             })}
         </ul> : null}
         {reply ? <div>
-            <div>
+            <div className="mb-15">
                 <textarea className="input" value={commentText} onChange={e => setCommentText(e.target.value)}></textarea>
-                <button className="btn btn-md btn-primary float-right" onClick={async () => {
+                <button className="btn btn-md btn-primary float-right mt-10" onClick={async () => {
                     await makeChildComment(comment.id, commentText)
                     setCommentText('')
                     setReply(false)
                 }}> Comment</button>
+                <p className="clearfix"></p>
             </div>
         </div> : null}
 

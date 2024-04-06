@@ -13,7 +13,19 @@ const initialState: TicketStateInterface = {
     total: 0,
     isLoading: false,
     error: null,
-    gridFilters: {}
+    gridFilters: {},
+    ticketDetails: {
+        priority: '',
+        details: '',
+        rating: 0,
+        resolved_date: null,
+        status: '',
+        submission_date: null,
+        title: '',
+        comments: [],
+        isLoading: false,
+        isCommentLoading: false
+    }
 };
 
 export const ticketSlice = createSlice({
@@ -31,6 +43,22 @@ export const ticketSlice = createSlice({
         },
         reset: (state) => {
             return { ...state, ...initialState };
+        },
+        startTicketDetailsLoading: (state)=>{
+            const ticketDetails = {...state.ticketDetails};
+            ticketDetails.isLoading =  true;
+            return {...state, ticketDetails:ticketDetails}
+        },
+        startTicketDetailsCommentLoading: (state)=>{
+            const ticketDetails = {...state.ticketDetails};
+            ticketDetails.isCommentLoading =  true;
+            return {...state, ticketDetails:ticketDetails}
+        },
+        setTicketDetailsComment: (state, action)=>{
+            const ticketDetails = {...state.ticketDetails};
+            ticketDetails.comments =  action.payload.comments;
+            ticketDetails.isCommentLoading = false;
+            return {...state, ticketDetails:ticketDetails}
         }
 
     }
@@ -113,6 +141,41 @@ export const ticketsActions = {
         dispatch(ticketSlice.actions.actionDone({ error: error }))
         if (error) return false;
     },
+    ticketDetails:(id:number)=>async(dispatch: any)=>{
+            dispatch(ticketSlice.actions.startTicketDetailsLoading())
+            const apiHandler = new TicketApiService(appConst.API_URL);
+            const ticketId = Number(id);
+            const response = await apiHandler.getById(ticketId);
+            if (response.type == ResponseType.success) {
+                
+                const commentsResponse = await apiHandler.comments(ticketId);
+                if (commentsResponse.type == ResponseType.success) {
+                    const ticketDetailsObject = {
+                        priority: response.data.priority,
+                        details: response.data.details,
+                        rating: response.data.rating,
+                        resolved_date: response.data.resolved_date,
+                        status: response.data.status,
+                        submission_date: response.data.submission_date,
+                        title: response.data.title,
+                        comments: commentsResponse.data,
+                        isLoading: false,
+                        isCommentLoading: false
+                    }
+                    dispatch(ticketSlice.actions.updateState({ticketDetails: ticketDetailsObject}))
+                }
+            }
+        },
+        getComments:(id:number)=>async(dispatch: any)=>{
+            
+            dispatch(ticketSlice.actions.startTicketDetailsCommentLoading())
+            const ticketService = new TicketApiService(appConst.API_URL);
+            const commentsResponse = await ticketService.comments(Number(id));
+            if (commentsResponse.type == ResponseType.success) {
+                dispatch(ticketsActions.setTicketDetailsComment({comments: commentsResponse.data}));
+            }
+        } 
+    
 }
 
 export default ticketSlice.reducer;

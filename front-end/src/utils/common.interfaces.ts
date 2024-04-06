@@ -74,7 +74,20 @@ export interface TicketStateInterface {
     isLoading: boolean;
     error: any;
     grid: any[];
-    gridFilters: {[key:string]: any}
+    gridFilters: {[key:string]: any},
+    ticketDetails: TicketDetails
+}
+export interface TicketDetails {
+    priority: string,
+    details: string,
+    rating: number,
+    resolved_date: null|Date|string,
+    status: string,
+    submission_date: null|Date|string,
+    title: string,
+    comments: any[],
+    isLoading: boolean
+    isCommentLoading: boolean
 }
 export interface UsersStateInterface {
     perPage: number;

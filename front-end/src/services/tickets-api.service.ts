@@ -23,7 +23,9 @@ export class TicketApiService extends ApiService{
         return await this.patch({path: 'tickets/'+id,body:body, allowAborate: true})
     }
 
-
+    async resolveTicket(id:number|string){
+        return await this.post({path: 'tickets/'+id+'/resolve', allowAborate: true})
+    }
     async getById(id:number|string){
         return await this.get({path: 'tickets/'+id, allowAborate: true})
     }
