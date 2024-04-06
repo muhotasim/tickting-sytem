@@ -68,7 +68,7 @@ export const ticketsActions = {
             const ticketService = new TicketApiService(appConst.API_URL)
             const ticketsResult = await ticketService.create(body);
             if (ticketsResult.type == ResponseType.success) {
-                return ticketsResult;
+                return true;
             } else {
                 error = ticketsResult.message;
 

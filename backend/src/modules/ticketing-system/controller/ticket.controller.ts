@@ -1,12 +1,16 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { TicketService } from "../service/ticket.service";
 import { User, errorResponse, successResponse } from "src/utils/common.functions";
 import { GlobalService } from "src/modules/common/services/global.service";
 import messagesConst from "src/utils/message-const.message";
 import { CreateTicketDTO } from "../dto/create-ticket.dto";
 import { TicketStatus } from "src/utils/custome.datatypes";
-
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { AuthorizationGuard } from "src/guards/authorization.guard";
+@ApiTags('Tickets')
+@UseGuards(AuthorizationGuard)
 @Controller('tickets')
+@ApiBearerAuth()
 export class TicketController {
     constructor(private readonly ticketService: TicketService, private readonly globalService: GlobalService) { }
 

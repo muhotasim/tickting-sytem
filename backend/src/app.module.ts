@@ -4,11 +4,13 @@ import { getDatabaseConfig } from './config/database';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './modules/common/common.module';
 import { GlobalService } from './modules/common/services/global.service'
+import { TicketModule } from './modules/ticketing-system/ticktet.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(getDatabaseConfig()),
     AuthModule,
-    CommonModule
+    CommonModule,
+    TicketModule
   ],
   providers: [
   ],

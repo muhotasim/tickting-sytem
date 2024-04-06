@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import Select from "../../components/select";
 import { ticketPriorityOptions, ticketStatusOptions } from "../../utils/contome.datatype";
 import FileInput from "../../components/file-input";
+import { ticketsActions } from "../../store/tickets.store";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../store";
 
 
 const ModifyTicket = () => {
-    const [formData, setFormData] = useState<{title: string, description: string,priority:null|string,attachments:any[] }>({
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const {isLoading} = useSelector((state: RootState)=>state.tickets)
+    const [formData, setFormData] = useState<{title: string, details: string,priority:null|string,attachments:any[] }>({
         title: '',
-        description: '',
+        details: '',
         priority: null,
         attachments: []
     })
@@ -40,6 +47,15 @@ const ModifyTicket = () => {
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(formData);
+        const saved = await ticketsActions.create({
+            title: formData.title,
+            details: formData.details,
+            priority: formData.priority,
+        })(dispatch);
+        if(saved){
+            navigate('/tickets-management/tickets')
+        }
+        
         
     }
 
@@ -69,7 +85,7 @@ const ModifyTicket = () => {
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div className="form-group mt-15">
                         <label className="form-label pb-5">Description</label>
-                        <textarea className="input" rows={6} value={formData.description} onChange={e => changeFormData('description', e.target.value)} />
+                        <textarea className="input" rows={6} value={formData.details} onChange={e => changeFormData('details', e.target.value)} />
                     </div>
                 </div>
             </div>
@@ -93,7 +109,7 @@ const ModifyTicket = () => {
             </div>
             <div className="row">
                 <div className="col-md-6">
-                <button type="submit" className="btn btn-primary btn-md mt-20 mb-15 float-right"><i className="fa fa-save"></i> Submit</button>
+                    <button type="submit" disabled={isLoading} className="btn btn-primary btn-md mt-20 mb-15 float-right">{isLoading?<i className="fa fa-sync fa-spin"></i>:<i className="fa fa-save"></i>} Submit</button>
                 </div>
             </div>
         </form>
