@@ -13,7 +13,8 @@ import appConst from "../../constants/app.const";
 const ViewTicket = () => {
     const { id } = useParams()
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [commentText, setCommentText] = useState('')
     const { isLoading } = useSelector((state: RootState) => state.tickets)
     const [comments, setComments] = useState([
         {
@@ -40,6 +41,19 @@ const ViewTicket = () => {
         title: ''
     })
 
+    const makeComment =async ()=>{
+        
+        const apiHandler = new TicketApiService(appConst.API_URL);
+        const responseCommentResponse = await apiHandler.makeComment({ticket_id: Number(id), comment: commentText})
+        if (responseCommentResponse.type == ResponseType.success) {
+            setCommentText('');
+            const commentsResponse = await apiHandler.comments(Number(id));
+            if (commentsResponse.type == ResponseType.success) {
+                console.log(commentsResponse)
+                setComments(commentsResponse.data);
+            }
+        }
+    }
     const fetchData = async () => {
         const apiHandler = new TicketApiService(appConst.API_URL);
         const ticketId = Number(id);
@@ -82,6 +96,12 @@ const ViewTicket = () => {
 
             <div >
                 <h5 className="mt-15">Comments</h5>
+                <div className="row">
+                    <div className="col-md-6">
+                        <textarea className="input" value={commentText} onChange={e=>setCommentText(e.target.value)}></textarea>
+                        <button className="btn btn-md btn-primary float-right" onClick={makeComment}> Comment</button>
+                    </div>
+                </div>
                 <ul className="comments-holder">
                 {comments.map((comment, index)=>{
                     return <li className="comment" key={index}>

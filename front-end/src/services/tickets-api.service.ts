@@ -8,6 +8,10 @@ export class TicketApiService extends ApiService{
     async list(page:number, perPage: number, filters: {[key:string]: any} = {}){
         return await this.get({path: 'tickets', query: {page , perPage, ...filters}, allowAborate: true})
     }
+
+    async makeComment({ticket_id, comment}:{ticket_id:number, comment:string}){
+        return await this.post({path: 'tickets/comment', query: {}, body: { ticket_id, comment }, allowAborate: true})
+    }
     async comments(id:number){
         return await this.get({path: 'tickets/comments/'+id, query: {}, allowAborate: true})
     }
