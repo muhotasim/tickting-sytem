@@ -7,11 +7,11 @@ import { CreateTicketDTO } from "../dto/create-ticket.dto";
 import { TicketStatus } from "src/utils/custome.datatypes";
 
 @Controller('tickets')
-export class TicketController{
-    constructor(private readonly ticketService: TicketService, private readonly globalService:GlobalService){}
+export class TicketController {
+    constructor(private readonly ticketService: TicketService, private readonly globalService: GlobalService) { }
 
     @Get()
-    async index(@User() userInfo, @Query() query:any = {}, @Query('page') page: number, @Query('perPage') perPage: number){
+    async index(@User() userInfo, @Query() query: any = {}, @Query('page') page: number, @Query('perPage') perPage: number) {
         try {
             const gridData = this.globalService.getGlobalData('tickets');
             delete query.page;
@@ -24,9 +24,9 @@ export class TicketController{
         }
     }
     @Post()
-    async submitTicket(@User() userInfo, @Body() body: CreateTicketDTO){
+    async submitTicket(@User() userInfo, @Body() body: CreateTicketDTO) {
         try {
-            const ticketData:any = {...body};
+            const ticketData: any = { ...body };
             ticketData.status = TicketStatus.open;
             ticketData.submission_date = new Date();
             ticketData.submited_by = userInfo.id;
@@ -38,9 +38,39 @@ export class TicketController{
     }
 
     @Patch('assign/:id')
-    async asyncTicket (@Param('id') id:number,@Body('assign_to') assign_to:number){
-        return await this.ticketService.assignTicket({ticket_id: id, assigned_id: assign_to});
+    async asyncTicket(@Param('id') id: number, @Body('assign_to') assign_to: number) {
+        try {
+            const data = await this.ticketService.assignTicket({ ticket_id: id, assigned_id: assign_to });
+            return successResponse(data, "");
+        } catch (e) {
+            return errorResponse(e);
+        }
     }
 
-    
+
+    @Post('comment')
+    async comment(@Body() body: { ticket_id: number, comment: string }, @User() user) {
+        try {
+            const data = await this.ticketService.makeComment({ ticket_id: body.ticket_id, comment: body.comment, commented_by: user.id })
+            return successResponse(data, "");
+
+        } catch (e) {
+            return errorResponse(e);
+        }
+    }
+
+    @Get('comments/:ticket_id')
+    async comments(@Query('page') page: number, @Query('perPage') perPage: number, @Param('ticket_id') ticket_id: number) {
+        try {
+            const data = await this.ticketService.getComment({
+                ticket_id: ticket_id,
+                page: page,
+                perPage: perPage
+            })
+            return successResponse(data, "");
+        } catch (e) {
+            return errorResponse(e);
+        }
+    }
+
 }
