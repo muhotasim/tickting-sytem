@@ -15,7 +15,6 @@ import Loader from "../../components/loading";
 const ViewTicket = () => {
     const { id } = useParams()
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [commentText, setCommentText] = useState('')
     const {isLoading, title, details, priority, status,submission_date, comments, isCommentLoading} = useSelector((state: RootState) => state.tickets.ticketDetails)
 
