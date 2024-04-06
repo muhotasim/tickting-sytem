@@ -124,3 +124,19 @@
 .page{
     width: 100%;
 }
+.comments-holder,.sub-comment-holder{
+    list-style: none;
+    .comment{
+        margin-bottom: 2rem;
+        .user-name{
+            font-weight: 600;
+            margin-bottom: .3rem;
+        }
+        .comment-text{
+            font-size: 1.6rem;
+        }
+    }
+    .date-text{
+        font-size: 1.4rem;
+    }
+}

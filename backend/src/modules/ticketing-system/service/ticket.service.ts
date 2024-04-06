@@ -79,7 +79,7 @@ export class TicketService{
         const ticket = new Ticket()
         ticket.id = ticket_id;
         const skip = perPage * (page - 1)
-        const comments =  await this._m_Comment.find({where: {ticket: ticket, parent: IsNull()},relations: ['comments'], skip, take: perPage});
+        const comments =  await this._m_Comment.find({where: {ticket: ticket, parent: IsNull()},relations: ['comments','comments.user', 'user'], skip, take: perPage});
         return comments;
     }
 }

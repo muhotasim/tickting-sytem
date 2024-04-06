@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../../store";
 import { TicketApiService } from "../../services/tickets-api.service";
 import appConst from "../../constants/app.const";
+import moment from "moment";
 
 
 const ViewTicket = () => {
@@ -29,7 +30,7 @@ const ViewTicket = () => {
                 "updated_at": "2024-04-06T14:16:31.877Z"
             }]
         },
-        
+
     ])
     const [ticketData, setTicketData] = useState({
         priority: '',
@@ -41,10 +42,10 @@ const ViewTicket = () => {
         title: ''
     })
 
-    const makeComment =async ()=>{
-        
+    const makeComment = async () => {
+
         const apiHandler = new TicketApiService(appConst.API_URL);
-        const responseCommentResponse = await apiHandler.makeComment({ticket_id: Number(id), comment: commentText})
+        const responseCommentResponse = await apiHandler.makeComment({ ticket_id: Number(id), comment: commentText })
         if (responseCommentResponse.type == ResponseType.success) {
             setCommentText('');
             const commentsResponse = await apiHandler.comments(Number(id));
@@ -98,28 +99,34 @@ const ViewTicket = () => {
                 <h5 className="mt-15">Comments</h5>
                 <div className="row">
                     <div className="col-md-6">
-                        <textarea className="input" value={commentText} onChange={e=>setCommentText(e.target.value)}></textarea>
+                        <textarea className="input" value={commentText} onChange={e => setCommentText(e.target.value)}></textarea>
                         <button className="btn btn-md btn-primary float-right" onClick={makeComment}> Comment</button>
                     </div>
                 </div>
-                <ul className="comments-holder">
-                {comments.map((comment, index)=>{
-                    return <li className="comment" key={index}>
-                        <p>{comment.comment}</p>
-                        <p>{comment.created_at}</p>
+                <div className="row">
+                    <div className="col-md-6">
+                        <ul className="comments-holder">
+                            {comments.map((comment:any, index) => {
+                                return <li className="comment" key={index}>
+                                    <p className="user-name">{comment.user.name}</p>
+                                    <p className="text-small mb-5 date-text">{moment(comment.created_at).format('LLLL')}</p>
+                                    <p className="comment-text">{comment.comment}</p>
 
-                        <ul className="sub-comment-holder">
-                            {comment.comments.map((childComment, indexChild)=>{
-                                return <li className="comment" key={index+'-'+indexChild}>
-                                    <p>{childComment.comment}</p>
-                                    <p>{childComment.created_at}</p>
+                                    <ul className="sub-comment-holder">
+                                        {comment.comments.map((childComment:any, indexChild:number) => {
+                                            return <li className="comment" key={index + '-' + indexChild}>
+                                                <p className="user-name">{childComment.user.name}</p>
+                                                <p className="text-small mb-5 date-text">{moment(childComment.created_at).format('LLLL')}</p>
+                                                <p className="comment-text">{childComment.comment}</p>
+                                            </li>
+                                        })}
+                                    </ul>
+
                                 </li>
                             })}
                         </ul>
-
-                    </li>
-                })}
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
