@@ -17,6 +17,10 @@ export class TicketService{
         private readonly userService:UserService
 
     ){}
+
+    async getById (id:number){
+        return await this._m_Ticket.findOne({where: {id:id}})
+    }
     async getTickets(page: number, perPage: number){
         const options: FindManyOptions<Ticket> = {
             take: perPage,

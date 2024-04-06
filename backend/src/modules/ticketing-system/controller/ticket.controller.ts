@@ -41,6 +41,7 @@ export class TicketController {
         }
     }
 
+
     @Patch('assign/:id')
     async asyncTicket(@Param('id') id: number, @Body('assign_to') assign_to: number) {
         try {
@@ -61,6 +62,18 @@ export class TicketController {
         } catch (e) {
             return errorResponse(e);
         }
+    }
+
+    
+    @Get('/:id')
+    async getById(@Param('id') id:number){ 
+        try {   
+            const data = await this.ticketService.getById(id)
+            return successResponse(data, "");
+
+    } catch (e) {
+        return errorResponse(e);
+    }
     }
 
     @Get('comments/:ticket_id')

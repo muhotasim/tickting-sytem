@@ -8,7 +8,9 @@ export class TicketApiService extends ApiService{
     async list(page:number, perPage: number, filters: {[key:string]: any} = {}){
         return await this.get({path: 'tickets', query: {page , perPage, ...filters}, allowAborate: true})
     }
-    
+    async comments(id:number){
+        return await this.get({path: 'tickets/comments/'+id, query: {}, allowAborate: true})
+    }
     async create(body: {[key:string]: any}|FormData){
         return await this.post({path: 'tickets',body:body, allowAborate: true})
     }

@@ -18,6 +18,7 @@ const ModifyRole = lazy(() => import('./pages/roles/modify'));
 const UserPage = lazy(() => import('./pages/users'));
 const ModifyUser = lazy(() => import('./pages/users/modify'));
 const Dashboard = lazy(() => import('./pages/dashboard'))
+const ViewTicket = lazy(() => import('./pages/tickets/view'))
 const AuthenticatedRoutes = () => {
     const loggedIn = useSelector((state: RootState) => state.auth.loggedIn);
 
@@ -41,6 +42,7 @@ const AuthenticatedRoutes = () => {
                     <Route path='/access-management/permissions/:id' element={<ModifyPermission />} />
                     <Route path='/tickets-management/tickets' element={<Tickets />} />
                     <Route path='/tickets-management/submit' element={<ModifyTicket />} />
+                    <Route path='/tickets-management/tickets/:id' element={<ViewTicket />} />
                     <Route path='/*' element={<PageNotFound />} />
                 </Routes>
             </Suspense>

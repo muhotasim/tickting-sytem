@@ -6,6 +6,7 @@ import { RootState } from "../../store";
 import FilterGrid from "../../components/filter-grid";
 import { Link, useNavigate } from "react-router-dom";
 import { ticketsActions } from "../../store/tickets.store";
+import moment from "moment";
 
 const TicketsPage:React.FC = ()=>{
 
@@ -26,13 +27,14 @@ const TicketsPage:React.FC = ()=>{
         setColumns([
             {label: 'Id', key: 'id', dataIndex: 'id', searchable: false},
             {label: 'Title', key: 'title', dataIndex: 'title'},
-            {label: 'Details', key: 'details', dataIndex: 'details'},
+            // {label: 'Details', key: 'details', dataIndex: 'details'},
             {label: 'Priority', key: 'priority', dataIndex: 'priority'},
             {label: 'Status', key: 'status', dataIndex: 'status'},
-            {label: 'Submission Date', key: 'submission_date', dataIndex: 'submission_date'},
-            {label: 'Resolved Date', key: 'resolved_date', dataIndex: 'resolved_date'},
+            {label: 'Submission Date', key: 'submission_date', dataIndex: 'submission_date', render: (val)=>moment(val).format('YYYY-MM-DD')},
+            // {label: 'Resolved Date', key: 'resolved_date', dataIndex: 'resolved_date'},
             {label: 'Is Active', key: 'is_active', dataIndex: 'is_active', render: (val: any)=>val?"Yes":"No"},
             {label: 'Action', key: 'actions', dataIndex: 'actions', render: (text: any, row: { id: string; })=>(<div>
+              <button className="btn btn-primary btn-sm" onClick={()=>{ navigate('/tickets-management/tickets/'+row.id) }}>Details</button>
               </div>)}
         ])
         return ()=>{ 
