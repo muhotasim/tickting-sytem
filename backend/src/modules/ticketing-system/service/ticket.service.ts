@@ -6,7 +6,7 @@ import { Ticket } from "src/models/ticket.model";
 import { User } from "src/models/user.model";
 import { UserService } from "src/modules/common/services/user.service";
 import { TicketInterface, TicketStatus } from "src/utils/custome.datatypes";
-import { FindManyOptions, Repository } from "typeorm";
+import { FindManyOptions, IsNull, Repository } from "typeorm";
 
 @Injectable()
 export class TicketService{
@@ -67,8 +67,10 @@ export class TicketService{
         return await this._m_Comment.save(savedComment)
     }
     async getComment({ticket_id, page = 1, perPage = 10}:{ticket_id:number, page:number, perPage:number}){
-        const ticket = await this._m_Ticket.findOne({where: {id: ticket_id}})
+        const ticket = new Ticket()
+        ticket.id = ticket_id;
         const skip = perPage * (page - 1)
-        return await this._m_Comment.find({ where: {ticket: ticket}, skip, take: perPage })
+        const comments =  await this._m_Comment.find({where: {ticket: ticket, parent: IsNull()},relations: ['comments'], skip, take: perPage});
+        return comments;
     }
 }
