@@ -80,6 +80,7 @@ export class TicketService{
         assignedUser.id = assigned_id;
         const ticket = await this._m_Ticket.findOne({where: {id: ticket_id}})
         ticket.assigned_to = assignedUser;
+        ticket.status = TicketStatus.inprocess;
         return await this._m_Ticket.save(ticket)
     }
     async makeComment({ticket_id, commented_by, comment, parent_id}:{ticket_id:number, commented_by:number, comment: string, parent_id:any}){

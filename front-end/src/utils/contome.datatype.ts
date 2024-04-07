@@ -3,9 +3,7 @@ export enum ResponseType { success = 'success', error = 'error', validate = 'val
 
 export const ticketStatusOptions = [
     {label: 'Open', value: 'Open'},
-    {label: 'Assigned', value: 'Assigned'},
     {label: 'In Progress', value: 'In Progress'},
-    {label: 'On Hold', value: 'On Hold'},
     {label: 'Waiting for Customer', value: 'Waiting for Customer'},
     {label: 'Resolved', value: 'Resolved'},
     {label: 'Reopened', value: 'Reopened'},

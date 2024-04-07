@@ -39,9 +39,7 @@ export enum TicketPriority{
 }
 export enum TicketStatus{
     open = 'Open',
-    assigned = 'Assigned',
     inprocess = 'In Progress',
-    onhold = 'On Hold',
     waitingforcustomer = 'Waiting for Customer',
     resolved = 'Resolved',
     reopened = 'Reopened',

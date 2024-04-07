@@ -5,9 +5,7 @@ export interface DashboardStateInterface{
     numberOfTickets: number;
     ticket: {
         'Open': number;
-        'Assigned': number;
         'In Progress': number;
-        'On Hold': number;
         'Waiting for Customer': number;
         'Resolved': number;
         'Reopened': number;

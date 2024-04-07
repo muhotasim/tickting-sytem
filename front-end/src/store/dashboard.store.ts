@@ -11,9 +11,7 @@ const initialState: DashboardStateInterface = {
     numberOfTickets: 0,
     ticket: {
         'Open': 0,
-        'Assigned': 0,
         'In Progress': 0,
-        'On Hold': 0,
         'Waiting for Customer': 0,
         'Resolved': 0,
         'Reopened': 0,
