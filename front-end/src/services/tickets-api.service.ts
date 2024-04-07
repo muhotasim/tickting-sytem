@@ -5,6 +5,10 @@ export class TicketApiService extends ApiService{
         super(apiUrl, token);
     }
 
+    async getDashboard(){
+        
+        return await this.get({path: 'tickets/dashboard', query: {}, allowAborate: true})
+    }
     async list(page:number, perPage: number, filters: {[key:string]: any} = {}){
         return await this.get({path: 'tickets', query: {page , perPage, ...filters}, allowAborate: true})
     }

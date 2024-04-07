@@ -20,6 +20,20 @@ export class TicketService{
 
     ){}
 
+    async dashboardData (){
+        const summery = await this._m_Ticket
+        .createQueryBuilder('ticket')
+        .select("ticket.status")
+        .addSelect("COUNT(ticket.id)", "total")
+        .groupBy("ticket.status")
+        .getRawMany()
+        let data = {};
+        for(let sD of summery){
+            data[sD.ticket_status] = Number(sD.total)
+        }
+        return data;
+    }
+
     async getById (id:number){
         return await this._m_Ticket.findOne({where: {id:id},
             relations: ['assigned_to','submited_by']})

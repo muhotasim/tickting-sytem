@@ -1,6 +1,20 @@
 export interface PermissionInterface {
     permission_key: string;
 }
+export interface DashboardStateInterface{
+    numberOfTickets: number;
+    ticket: {
+        'Open': number;
+        'Assigned': number;
+        'In Progress': number;
+        'On Hold': number;
+        'Waiting for Customer': number;
+        'Resolved': number;
+        'Reopened': number;
+        'Cancelled':number;
+    },
+    isLoading: boolean;
+}
 export enum NotificationStatus {
     read = 'read',
     unread = 'unread',
@@ -26,7 +40,7 @@ export enum TicketStatus{
     onhold = 'On Hold',
     waitingforcustomer = 'Waiting for Customer',
     resolved = 'Resolved',
-    reopened = 'reopened',
+    reopened = 'Reopened',
     cancelled = 'Cancelled',
 }
 export interface NotificationInterface<User>{ type: NotificationType, status: NotificationStatus, message: string, link: string, user:User  }

@@ -14,6 +14,16 @@ import { AuthorizationGuard } from "src/guards/authorization.guard";
 export class TicketController {
     constructor(private readonly ticketService: TicketService, private readonly globalService: GlobalService) { }
 
+    @Get('/dashboard')
+    async dashboard(){
+        try{
+
+            const data =await this.ticketService.dashboardData()
+            return successResponse(data, messagesConst['en'].controller.tickets.index);
+        } catch (e) {
+            return errorResponse(e);
+        }
+    }
     @Get()
     async index(@User() userInfo, @Query() query: any = {}, @Query('page') page: number, @Query('perPage') perPage: number) {
         try {
@@ -78,7 +88,7 @@ export class TicketController {
     
     @Get('/:id')
     async getById(@Param('id') id:number){ 
-        try {   
+        try {
             const data = await this.ticketService.getById(id)
             return successResponse(data, "");
 

@@ -7,6 +7,7 @@ import logger from 'redux-logger';
 import rolesSlice from './roles.store';
 import permissionSlice from './permissions.store';
 import ticketSlice from './tickets.store';
+import dashboardSlice from './dashboard.store';
 export const rootStore = configureStore({
   reducer: {
     auth: authSlice,
@@ -15,7 +16,8 @@ export const rootStore = configureStore({
     user: usersSlice,
     roles: rolesSlice,
     permissions: permissionSlice,
-    tickets: ticketSlice
+    tickets: ticketSlice,
+    dashboard: dashboardSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
