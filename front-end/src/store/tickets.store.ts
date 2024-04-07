@@ -143,7 +143,7 @@ export const ticketsActions = {
         if (error) return false;
     },
     ticketDetails:(id:number)=>async(dispatch: any)=>{
-            dispatch(ticketSlice.actions.startTicketDetailsLoading())
+            // dispatch(ticketSlice.actions.startTicketDetailsLoading())
             const apiHandler = new TicketApiService(appConst.API_URL);
             const ticketId = Number(id);
             const response = await apiHandler.getById(ticketId);
@@ -171,7 +171,7 @@ export const ticketsActions = {
         },
         getComments:(id:number)=>async(dispatch: any)=>{
             
-            dispatch(ticketSlice.actions.startTicketDetailsCommentLoading())
+            // dispatch(ticketSlice.actions.startTicketDetailsCommentLoading())
             const ticketService = new TicketApiService(appConst.API_URL);
             const commentsResponse = await ticketService.comments(Number(id));
             if (commentsResponse.type == ResponseType.success) {

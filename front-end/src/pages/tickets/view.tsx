@@ -45,20 +45,16 @@ const ViewTicket = () => {
 
     const takeControl =async ()=>{
         const apiHandler = new TicketApiService(appConst.API_URL);
-
         const response = await apiHandler.takeControl({ticket_id: Number(id), user_id: Number(user.id)})
         if (response.type == ResponseType.success) {
             ticketsActions.ticketDetails(Number(id))(dispatch)
         }
     }
 
-
     useEffect(() => {
         ticketsActions.ticketDetails(Number(id))(dispatch)
     }, [])
 
-    console.log(assigned_to);
-    
     return <div className='page dashboard-page animate-fade-in'>
         {isLoading&&<p className="text-center"><i className="fa fa-sync fa-spin"></i> please wait</p>}
         <div style={{opacity:isLoading?0:1}}>
