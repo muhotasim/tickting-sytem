@@ -88,7 +88,8 @@ export interface TicketDetails {
     title: string,
     comments: any[],
     isLoading: boolean
-    isCommentLoading: boolean
+    isCommentLoading: boolean,
+    assigned_to: any
 }
 export interface UsersStateInterface {
     perPage: number;

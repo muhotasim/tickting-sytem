@@ -24,7 +24,8 @@ const initialState: TicketStateInterface = {
         title: '',
         comments: [],
         isLoading: false,
-        isCommentLoading: false
+        isCommentLoading: false,
+        assigned_to: null
     }
 };
 
@@ -150,6 +151,7 @@ export const ticketsActions = {
                 
                 const commentsResponse = await apiHandler.comments(ticketId);
                 if (commentsResponse.type == ResponseType.success) {
+                    
                     const ticketDetailsObject = {
                         priority: response.data.priority,
                         details: response.data.details,
@@ -160,7 +162,8 @@ export const ticketsActions = {
                         title: response.data.title,
                         comments: commentsResponse.data,
                         isLoading: false,
-                        isCommentLoading: false
+                        isCommentLoading: false,
+                        assigned_to: response.data.assigned_to ?? null
                     }
                     dispatch(ticketSlice.actions.updateState({ticketDetails: ticketDetailsObject}))
                 }

@@ -21,13 +21,15 @@ export class TicketService{
     ){}
 
     async getById (id:number){
-        return await this._m_Ticket.findOne({where: {id:id}})
+        return await this._m_Ticket.findOne({where: {id:id},
+            relations: ['assigned_to','submited_by']})
     }
     async getTickets(page: number, perPage: number){
         const options: FindManyOptions<Ticket> = {
             take: perPage,
             skip: perPage * (page - 1),
-            order: {id: 'DESC'}
+            order: {id: 'DESC'},
+            relations: ['assigned_to','submited_by']
         };
         const [data, total] = await this._m_Ticket
             .findAndCount(options);

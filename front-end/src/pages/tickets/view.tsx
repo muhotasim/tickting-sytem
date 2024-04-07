@@ -16,7 +16,7 @@ const ViewTicket = () => {
     const { id } = useParams()
     const dispatch = useDispatch();
     const [commentText, setCommentText] = useState('')
-    const {isLoading, title, details, priority, status,submission_date, comments, isCommentLoading} = useSelector((state: RootState) => state.tickets.ticketDetails)
+    const {isLoading, title, details, priority, status,submission_date, comments, isCommentLoading, assigned_to} = useSelector((state: RootState) => state.tickets.ticketDetails)
     const user =  useSelector((state: RootState) => state.auth.user)
 
     const markAsResolved = async () => {
@@ -56,6 +56,9 @@ const ViewTicket = () => {
     useEffect(() => {
         ticketsActions.ticketDetails(Number(id))(dispatch)
     }, [])
+
+    console.log(assigned_to);
+    
     return <div className='page dashboard-page animate-fade-in'>
         {isLoading&&<p className="text-center"><i className="fa fa-sync fa-spin"></i> please wait</p>}
         <div style={{opacity:isLoading?0:1}}>
@@ -71,8 +74,8 @@ const ViewTicket = () => {
                     <div className="mb-20 pb-20">
                     <span className="btn mb-15 mt-15" style={{ fontSize: '16px' }}>{priority}</span>
                     <div>
-                    {status!='Resolved'&&<button className="btn btn-sm btn-primary float-right ml-5 mb-5" style={{ fontSize: '16px' }} onClick={() => { markAsResolved() }}>Resolve</button>}
-                    {status=='Open'&&<button className="btn btn-sm float-right btn-primary" style={{ fontSize: '16px' }} onClick={()=>{takeControl()}}>Take Control</button>}
+                    {(status!='Resolved')&&<button className="btn btn-sm btn-primary float-right ml-5 mb-5" style={{ fontSize: '16px' }} onClick={() => { markAsResolved() }}>Resolve</button>}
+                    {(status=='Open'&&!assigned_to)&&<button className="btn btn-sm float-right btn-primary" style={{ fontSize: '16px' }} onClick={()=>{takeControl()}}>Take Control</button>}
                     </div>
                     
                     <p className="clearfix"></p>
