@@ -1,0 +1,19 @@
+.dashboard-cart{
+    display: flex;
+    gap: 2rem;
+    background-color: var(--primary-color);
+    color: var(--light-font-color);
+    padding: 2rem;
+    justify-content: space-between;
+    min-height: 12rem;
+    border-radius: .5rem;
+    h4{
+        font-size: 2rem;
+    }
+    .summery{
+        font-size: 1.8rem;
+        font-weight: bold;
+        align-items: flex-end;
+        margin-top: auto;
+    }
+}
