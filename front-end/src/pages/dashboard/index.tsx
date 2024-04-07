@@ -41,7 +41,7 @@ const DashboardPage:React.FC = ()=>{
     console.log(numberOfTickets, ticket, isLoading)
     return <div className='page dashboard-page animate-fade-in'>
          <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-5">
                 <ReactApexChart options={chartObj.options} series={chartObj.series} type="pie" height={350} />
             </div>
          </div>
