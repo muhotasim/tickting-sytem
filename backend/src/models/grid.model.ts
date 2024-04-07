@@ -22,6 +22,9 @@ export class FilterGrid{
 
     @Column()
     condition: string
+
+    @Column({ default: '[]'})
+    options: string
     
     @Column({type: 'enum',enum: GridTypes, default: GridTypes.string})
     type: GridTypes

@@ -14,7 +14,7 @@ export class RoleService {
         const options: FindManyOptions<Role> = {
             take: perPage,
             skip: perPage * (page - 1),
-        };
+        }; 
         delete filterParams.perPage
         delete filterParams.page
         if ( Object.keys(filterParams).length) {

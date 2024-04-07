@@ -28,7 +28,8 @@ export interface NotificationInterface<User>{ type: NotificationType, status: No
 export enum GridTypes{
     number = 'number',
     string = 'string',
-    date = 'date'
+    date = 'date',
+    select = 'select'
 }
 
 export enum TicketPriority{

@@ -42,10 +42,10 @@ const DashboardPage:React.FC = ()=>{
     return <div className='page dashboard-page animate-fade-in'>
         <h2 className="mt-15 mb-15">Dashboard</h2>
          <div className="row">
-            <div className="col-md-5 col-lg-4 col-sm-12">
+            <div className="col-md-12 col-lg-6 col-sm-12">
                 <ReactApexChart options={chartObj.options} series={chartObj.series} type="pie" height={350} />
             </div>
-            {/* <div className="col-md-7 col-sm-12">
+            {/* <div className="col-md-6 col-sm-12">
               <div className="row">
                 <div className="col-md-6"><div className="dashboard-cart">
                   <div className="title"><h4>Average Time To Be Resolved</h4></div>

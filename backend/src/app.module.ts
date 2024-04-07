@@ -19,7 +19,10 @@ import { TicketModule } from './modules/ticketing-system/ticktet.module';
 export class AppModule implements OnModuleInit{ 
   constructor(private readonly globalService: GlobalService) {}
   async onModuleInit() {
-    const data = await this.globalService.getGrid();
+    const data = (await this.globalService.getGrid()).map(d=>{
+      d.options = d.options?JSON.parse(d.options):[]
+      return d;
+    });
     this.globalService.setGlobalData(data);
   }
 

@@ -31,7 +31,7 @@ export class TicketController {
             delete query.page;
             delete query.perPage;
 
-            const data = await this.ticketService.getTickets(page, perPage)
+            const data = await this.ticketService.getTickets(page, perPage, gridData, query)
             return successResponse(data, messagesConst['en'].controller.tickets.index, gridData);
         } catch (e) {
             return errorResponse(e);
