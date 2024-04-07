@@ -40,15 +40,6 @@ export class TicketController {
             return errorResponse(e);
         }
     }
-    @Post('/:id/resolve')
-    async resolveTicket(@Param('id') id:number){
-        try{
-            const data = await this.ticketService.updateTicketStatus(id, TicketStatus.resolved);
-            return successResponse(data, messagesConst['en'].controller.tickets.index);
-        }catch (e) {
-            return errorResponse(e);
-        }
-    }
 
     @Patch('assign/:id')
     async asyncTicket(@Param('id') id: number, @Body('assign_to') assign_to: number) {
@@ -59,6 +50,18 @@ export class TicketController {
             return errorResponse(e);
         }
     }
+
+    
+    @Post('/:id/resolve')
+    async resolveTicket(@Param('id') id:number){
+        try{
+            const data = await this.ticketService.updateTicketStatus(id, TicketStatus.resolved);
+            return successResponse(data, messagesConst['en'].controller.tickets.index);
+        }catch (e) {
+            return errorResponse(e);
+        }
+    }
+
 
 
     @Post('comment')

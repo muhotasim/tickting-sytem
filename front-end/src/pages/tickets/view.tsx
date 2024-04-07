@@ -17,6 +17,7 @@ const ViewTicket = () => {
     const dispatch = useDispatch();
     const [commentText, setCommentText] = useState('')
     const {isLoading, title, details, priority, status,submission_date, comments, isCommentLoading} = useSelector((state: RootState) => state.tickets.ticketDetails)
+    const user =  useSelector((state: RootState) => state.auth.user)
 
     const markAsResolved = async () => {
         const apiHandler = new TicketApiService(appConst.API_URL);
@@ -42,6 +43,15 @@ const ViewTicket = () => {
         }
     }
 
+    const takeControl =async ()=>{
+        const apiHandler = new TicketApiService(appConst.API_URL);
+
+        const response = await apiHandler.takeControl({ticket_id: Number(id), user_id: Number(user.id)})
+        if (response.type == ResponseType.success) {
+            ticketsActions.ticketDetails(Number(id))(dispatch)
+        }
+    }
+
 
     useEffect(() => {
         ticketsActions.ticketDetails(Number(id))(dispatch)
@@ -60,7 +70,11 @@ const ViewTicket = () => {
                     <h4 className="mb-15">{title}</h4>
                     <div className="mb-20 pb-20">
                     <span className="btn mb-15 mt-15" style={{ fontSize: '16px' }}>{priority}</span>
+                    <div>
                     {status!='Resolved'&&<button className="btn btn-sm btn-primary float-right ml-5 mb-5" style={{ fontSize: '16px' }} onClick={() => { markAsResolved() }}>Resolve</button>}
+                    {status=='Open'&&<button className="btn btn-sm float-right btn-primary" style={{ fontSize: '16px' }} onClick={()=>{takeControl()}}>Take Control</button>}
+                    </div>
+                    
                     <p className="clearfix"></p>
                     </div>
                     <p className="clearfix"></p>

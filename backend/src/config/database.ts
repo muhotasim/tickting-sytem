@@ -9,6 +9,7 @@ import { FilterGrid } from "src/models/grid.model";
 import { Ticket } from "src/models/ticket.model";
 import { TicketAttachments } from "src/models/ticket-attachment.model";
 import { Comment } from "src/models/comment.model";
+import { Config } from "src/models/config.model";
 
 export const getDatabaseConfig = ():TypeOrmModuleOptions =>{
     return {
@@ -18,7 +19,7 @@ export const getDatabaseConfig = ():TypeOrmModuleOptions =>{
         username: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_DATABASE,
-        entities: [ User, Role,  Permission, Token, Menu, Notification, FilterGrid, Ticket, TicketAttachments, Comment ],
+        entities: [ User, Role,  Permission, Token, Menu, Notification, FilterGrid, Ticket, TicketAttachments, Comment, Config ],
         synchronize: true,
     }
 }

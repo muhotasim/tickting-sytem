@@ -60,7 +60,8 @@ export class TicketService{
     }
     async assignTicket({ticket_id, assigned_id}){
         
-        const assignedUser:User = await this.userService.findById(assigned_id);
+        const assignedUser:User = new User();
+        assignedUser.id = assigned_id;
         const ticket = await this._m_Ticket.findOne({where: {id: ticket_id}})
         ticket.assigned_to = assignedUser;
         return await this._m_Ticket.save(ticket)

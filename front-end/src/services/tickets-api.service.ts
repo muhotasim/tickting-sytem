@@ -12,6 +12,10 @@ export class TicketApiService extends ApiService{
     async makeComment({ticket_id, comment, parent_id}:{ticket_id:number, comment:string, parent_id: any}){
         return await this.post({path: 'tickets/comment', query: {}, body: { ticket_id, comment, parent_id }, allowAborate: true})
     }
+    async takeControl({ticket_id, user_id}:{ticket_id:number, user_id: number}){
+        return await this.patch({path: 'tickets/assign/'+ticket_id, query: {}, body: { assign_to: user_id }, allowAborate: true})
+    }
+
     async comments(id:number){
         return await this.get({path: 'tickets/comments/'+id, query: {}, allowAborate: true})
     }

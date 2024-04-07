@@ -7,6 +7,7 @@ import { ResponseType } from '../utils/contome.datatype';
 
 const initialState: AuthStateInterface = {
     user: {
+        id: null,
         token: null,
         refetshToken: null,
         name: '',
@@ -56,6 +57,7 @@ export const authActions = {
                     const user = userResult.data;
                     const loginData = {
                         user: {
+                            id: user.id,
                             token: tokenInfo.access_token,
                             refetshToken: tokenInfo.refresh_token,
                             name: user.name,
@@ -108,7 +110,8 @@ export const authActions = {
                                 name: user.name,
                                 email: user.email,
                                 permissions: user.permissions,
-                                isSuperadmin: user.is_superadmin
+                                isSuperadmin: user.is_superadmin,
+                                id: user.id
                             },
                             loggedIn: true,
                             appLoading: false,
@@ -140,7 +143,8 @@ export const authActions = {
                             name: user.name,
                             email: user.email,
                             permissions: user.permissions,
-                            isSuperadmin: user.is_superadmin
+                            isSuperadmin: user.is_superadmin,
+                            id: user.id
                         },
                         loggedIn: true,
                         appLoading: false,

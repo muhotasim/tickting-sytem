@@ -39,6 +39,7 @@ export interface TicketInterface{
       }
 export interface AuthStateInterface {
     user: {
+        id: null|number;
         token: string | null;
         refetshToken: string | null;
         name: string;
