@@ -26,9 +26,9 @@ export class NotificationController {
     }
 
     @Patch('/mark-read')
-    async markAsRead(@User() userInfo, @Body('notificationIDs') ids: number[]){
+    async markAsRead(@Body('notificationIDs') ids: number[]){
         try{
-            await this._notificationService.updateNotifications(ids, { status: NotificationStatus.read })
+            await this._notificationService.markAsRead(ids)
             return successResponse({}, messagesConst['en'].controller.notification.update)
         } catch (e) {
             return errorResponse(e);

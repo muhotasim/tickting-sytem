@@ -2,19 +2,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../store";
 import { setTheme } from "../store/ui.store";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { authActions } from "../store/auth-store.store";
 
 const TopBar:React.FC<{toggle:()=>void}> = ({ toggle })=>{
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    const { notifications } = useSelector((state:RootState)=>state.auth)
+    const { notifications, totalUnRead } = useSelector((state:RootState)=>state.auth)
     const [openNotification, setOpenNotification] = useState(false);
     const [openUserDetails, setOpenUserDetails] = useState(false);
 
+    const markAsRead = ()=>{
+        const unReadNotifications = notifications.filter(d=>d.status=='unread').map(d=>d.id);
+        if(unReadNotifications.length>0){
+            authActions.readNotification(unReadNotifications)(dispatch);
+        }
+    }
     const toggleNotification = ()=>{
         if(!openNotification){
             setOpenUserDetails(false)
+            markAsRead();
         }
         setOpenNotification(!openNotification);
     }
@@ -41,10 +48,10 @@ const TopBar:React.FC<{toggle:()=>void}> = ({ toggle })=>{
                     {ui.themeList.map((value, index)=><option key={index} value={value}>{value}</option>)}
                     </select></li>
                 <li>
-                    <a onClick={toggleNotification}><span><span className=' fa fa-bell'> </span></span></a>
-                    <div className={"menu-details "+(openNotification?'open-menu': '')}>
+                    <a onClick={toggleNotification}><span><span className=' fa fa-bell'> </span><i className="unread-number">{totalUnRead}</i></span></a>
+                    <div className={"notifications menu-details "+(openNotification?'open-menu': '')}>
                         <ul>
-                            {notifications.slice(0, 5).map((notification, index)=>{
+                            {notifications.map((notification, index)=>{
                                 return <li key={index}><Link to={notification.link}>{notification.message}</Link></li>
                             })}
                             <li className="see-all-menu"><Link to='/notifications' onClick={()=>toggleNotification()}>See All</Link></li>

@@ -22,7 +22,8 @@ const initialState: AuthStateInterface = {
     changePasswordSuccess: false,
     forgotPasswordMailSend: false,
     appLoading: true,
-    notifications: []
+    notifications: [],
+    totalUnRead: 0
 };
 
 export const authSlice = createSlice({
@@ -117,7 +118,7 @@ export const authActions = {
                             appLoading: false,
                             notifications: user.notifications
                         }
-                        
+
                         setCookie('access_token', refreshTokenData.access_token, Number(refreshTokenData.ac_token_expires_at))
                         setCookie('access_token_expiry_at', refreshTokenData.ac_token_expires_at, Number(refreshTokenData.ac_token_expires_at))
                         setCookie('refresh_token', refreshTokenData.refresh_token, Number(refreshTokenData.rf_token_expires_at))
@@ -131,7 +132,7 @@ export const authActions = {
                 }
             } else if (refreshToken && accessToken) {
 
-                authService.updateAccessToken(accessToken,Number(accessTokenExpiry));
+                authService.updateAccessToken(accessToken, Number(accessTokenExpiry));
                 const userResult = await authService.user(appConst.DEFAULT_NOTIFICATION_NUMBER);
 
                 if (userResult.type == ResponseType.success) {
@@ -159,8 +160,8 @@ export const authActions = {
             error = e.message
         }
         dispatch(authSlice.actions.actionDone({ error: error }));
-        
-        dispatch(authSlice.actions.updateState({appLoading: false}))
+
+        dispatch(authSlice.actions.updateState({ appLoading: false }))
     },
     logout: () => async (dispatch: any) => {
         let error = null;
@@ -173,7 +174,7 @@ export const authActions = {
                 clearCookie('access_token_expiry_at')
                 clearCookie('refresh_token')
                 clearCookie('refresh_token_expiry_at')
-                dispatch(authSlice.actions.updateState({...initialState, appLoading: false}));
+                dispatch(authSlice.actions.updateState({ ...initialState, appLoading: false }));
             } else {
                 error = logoutResult.message;
             }
@@ -181,7 +182,7 @@ export const authActions = {
             error = e.message
         }
 
-        dispatch(authSlice.actions.actionDone({ error: error}))
+        dispatch(authSlice.actions.actionDone({ error: error }))
     },
     forgotPassword: (email: string) => async (dispatch: any) => {
         let error = null;
@@ -194,12 +195,12 @@ export const authActions = {
             } else {
                 error = forgotPasswordResult.message;
             }
-        } catch (e:any) {
+        } catch (e: any) {
             error = e.message
         }
         dispatch(authSlice.actions.actionDone({ error: error }))
     },
-    resetPassword: ( newPassword: string) => async (dispatch: any) => {
+    resetPassword: (newPassword: string) => async (dispatch: any) => {
         let error = null
         try {
             dispatch(authSlice.actions.startAction())
@@ -211,7 +212,7 @@ export const authActions = {
                 error = resetpasswordResult.message;
             }
 
-        } catch (e:any) {
+        } catch (e: any) {
             error = e.message;
         }
         dispatch(authSlice.actions.actionDone({ error: error }))
@@ -228,7 +229,28 @@ export const authActions = {
                 error = changePasswordResult.message;
             }
 
-        } catch (e:any) {
+        } catch (e: any) {
+            error = e.message;
+        }
+        dispatch(authSlice.actions.actionDone({ error: error }))
+    },
+    readNotification: (ids: number[]) => async (dispatch: any) => {
+        let error = null
+        try {
+            dispatch(authSlice.actions.startAction())
+            const authService = new AuthApiService(appConst.API_URL)
+            const notificationMarkAsRead = await authService.notificationsMarkAsRead(ids);
+            if (notificationMarkAsRead.type == ResponseType.success) {
+                const notificationResult = await authService.notifications(1, 10);
+                if (notificationResult.type == ResponseType.success) {
+                    dispatch(authSlice.actions.updateState({
+                        notifications: notificationResult.data.data
+                    }));
+                } else {
+                    error = notificationResult.message;
+                }
+            }
+        } catch (e: any) {
             error = e.message;
         }
         dispatch(authSlice.actions.actionDone({ error: error }))

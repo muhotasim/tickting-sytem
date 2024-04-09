@@ -12,38 +12,49 @@ export class NotificationService {
     constructor(@InjectRepository(Notification) private readonly _notification: Repository<Notification>) { }
 
 
-    async userNotifications(user_id, limit = 10, type: NotificationType):Promise<Notification[]>{
+    async userNotifications(user_id, limit = 10, type: NotificationType): Promise<Notification[]> {
         const user = new User()
         user.id = user_id
-        const notifications = await this._notification.find({ where: { user:  user, type: type}, order: {id: 'DESC'}, take: limit })
+        const notifications = await this._notification.find({ where: { user: user, type: type }, order: { id: 'DESC' }, take: limit })
         return notifications
     }
 
-    async findAndCount(page: number = 1, perPage: number = 10,grid: FilterGrid[], filterParams: { search?: string, user_id: number }): Promise<{ data: Notification[], total: number }> {
+    async markAsRead(notificationIds = []) {
+        const queryBuilder = this._notification.createQueryBuilder();
+
+        // Step 1: Build the update query
+        await queryBuilder
+            .update({ status: NotificationStatus.read })
+            .whereInIds(notificationIds)
+            .execute();
+        return true;
+    }
+
+    async findAndCount(page: number = 1, perPage: number = 10, grid: FilterGrid[], filterParams: { search?: string, user_id: number }): Promise<{ data: Notification[], total: number }> {
         const options: FindManyOptions<Notification> = {
             take: perPage,
             skip: perPage * (page - 1),
-            order: {id: 'desc'}
+            order: { id: 'desc' }
         };
-        if (filterParams ) {
+        if (filterParams) {
             options.where = {};
-            
-            if(filterParams.user_id){
+
+            if (filterParams.user_id) {
                 let user = new User()
                 user.id = Number(filterParams.user_id)
                 delete filterParams.user_id;
-                options.where['user'] =  user;
+                options.where['user'] = user;
             }
-            for(let key of Object.keys(filterParams)){
-                let gridData = grid.find(g=>g.effect_on==key);
-                if(filterParams[key]){
-                    if(gridData){
-                        options.where[key]=conditionWapper(gridData.condition,filterParams[key])
-                    }else{
-                        options.where[key]=filterParams[key];
+            for (let key of Object.keys(filterParams)) {
+                let gridData = grid.find(g => g.effect_on == key);
+                if (filterParams[key]) {
+                    if (gridData) {
+                        options.where[key] = conditionWapper(gridData.condition, filterParams[key])
+                    } else {
+                        options.where[key] = filterParams[key];
                     }
                 }
-                
+
             }
         }
         const [data, total] = await this._notification

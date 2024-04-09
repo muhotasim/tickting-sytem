@@ -13,6 +13,9 @@ export class AuthApiService extends ApiService{
         return await this.get({path: 'notifications', query: {page , perPage, ...filters}, allowAborate: true})
     }
 
+    async notificationsMarkAsRead(ids: number[]){
+        return await this.patch({path: 'notifications/mark-read', body:{notificationIDs: ids}, allowAborate: true})
+    }
     async refreshToken(refreshToken: string){
         return await this.post({path: 'auth/refresh-token', body: { refresh_token: refreshToken }})
     }

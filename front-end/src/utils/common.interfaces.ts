@@ -66,7 +66,8 @@ export interface AuthStateInterface {
     forgotPasswordMailSend: boolean;
     changePasswordSuccess: boolean;
     appLoading: boolean;
-    notifications: NotificationInterface<any>[]
+    notifications: NotificationInterface<any>[],
+    totalUnRead: number
 }
 export interface NotificationStateInterface {
     perPage: number;
