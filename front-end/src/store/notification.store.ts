@@ -5,6 +5,7 @@ import appConst from '../constants/app.const';
 import { clearCookie, getCookie, setCookie } from '../utils/common.functions';
 import { ResponseType } from '../utils/contome.datatype';
 import moment from 'moment';
+import { authActions } from './auth-store.store';
 const initialState: NotificationStateInterface = {
     page: 1,
     perPage: 10,
@@ -44,10 +45,12 @@ export const notificationActions = {
             const authService = new AuthApiService(appConst.API_URL)
             const notificationResult = await authService.notifications(page, perPage, gridFilters);
             if (notificationResult.type == ResponseType.success) {
-                dispatch(notificationSlice.actions.updateState({grid: notificationResult.grid, notifications: notificationResult.data.data.map((d: { timestamp: moment.MomentInput; })=>{
+                const notificationData = notificationResult.data.data.map((d: { timestamp: moment.MomentInput; })=>{
                     d.timestamp = d.timestamp?moment(d.timestamp).fromNow():''
                     return d;
-                }), total: notificationResult.data.total }));
+                })
+                dispatch(notificationSlice.actions.updateState({grid: notificationResult.grid, notifications: notificationData, total: notificationResult.data.total }));
+                dispatch(authActions.updateState({notifications: notificationData, totalUnRead: notificationData.filter(d=>d.status=='unread').length}))
             } else {
                 error = notificationResult.message;
             }

@@ -24,7 +24,6 @@ import { NotificationService } from "./services/notification.service";
 import { Notification } from "src/models/notification.model";
 import { FilterGrid } from "src/models/grid.model";
 import { GlobalService } from "./services/global.service";
-import { EventsController } from "./controllers/events.controller";
 
 @Module({
     imports: [
@@ -55,7 +54,7 @@ import { EventsController } from "./controllers/events.controller";
         ScheduleModule.forRoot(),
         JwtModule
     ],
-    controllers: [UserController, RoleController, PermissionController, NotificationController, EventsController],
+    controllers: [UserController, RoleController, PermissionController, NotificationController],
     providers: [UserService, RoleService, PermissionService, TokenService, ScheduleCleanUpService, MailService, QueueService, NotificationService, GlobalService],
     exports: [UserService, RoleService, PermissionService, TokenService, MailService, QueueService, NotificationService, GlobalService]
 })

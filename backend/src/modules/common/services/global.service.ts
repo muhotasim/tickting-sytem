@@ -28,10 +28,17 @@ export class GlobalService {
         }
         return this.globalNotificationService[user_id];
     }
-    updatedNotification(user_id: number){
-        const notification = this.globalNotificationService[user_id];
-        notification.notificationUpdate = false;
-        notification.ticketUpdate = false;
+    updatedNotification(user_id: number, key, value = false){
+        if(this.globalNotificationService[user_id]){
+            const notification = this.globalNotificationService[user_id];
+            notification[key] = value;
+        }else{
+            this.globalNotificationService[user_id] = {
+                notificationUpdate: true,
+                ticketUpdate: true
+            }
+        }
+        
     }
     newNotification(user_id: number){
         const notification = this.globalNotificationService[user_id];
@@ -41,7 +48,7 @@ export class GlobalService {
     
     newNotificationAdded(user_ids:number[]){
         for(let user_id of user_ids){
-            this.updatedNotification(user_id);
+            this.updatedNotification(user_id, 'notificationUpdate');
         }
     }
 

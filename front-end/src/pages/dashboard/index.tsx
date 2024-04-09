@@ -38,7 +38,6 @@ const DashboardPage:React.FC = ()=>{
     useEffect(()=>{
         dashboardActions.getDashboard()(dispatch);
     },[])
-    console.log(numberOfTickets, ticket, isLoading)
     return <div className='page dashboard-page animate-fade-in'>
         <h2 className="mt-15 mb-15">Dashboard</h2>
          <div className="row">

@@ -1,9 +1,11 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom"
 import BaseLayout from "./components/base-layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store";
 import Loader from "./components/loading";
+import { eventsActions } from "./store/events.store";
+import appConst from "./constants/app.const";
 
 
 const ChangePassword = lazy(() => import('./pages/change-password'))
@@ -19,8 +21,31 @@ const UserPage = lazy(() => import('./pages/users'));
 const ModifyUser = lazy(() => import('./pages/users/modify'));
 const Dashboard = lazy(() => import('./pages/dashboard'))
 const ViewTicket = lazy(() => import('./pages/tickets/view'))
+const serviceWorker = new Worker('/workers/worker.js');
 const AuthenticatedRoutes = () => {
-    const loggedIn = useSelector((state: RootState) => state.auth.loggedIn);
+    const dispatch = useDispatch()
+    const {loggedIn, user} = useSelector((state: RootState) => state.auth);
+    const lastEventData = ()=>{
+        serviceWorker.postMessage({ token: user.token, apiUrl: appConst.API_URL })
+        serviceWorker.onmessage = async function (event) {
+            const data = event.data;
+            if(loggedIn){
+                await eventsActions.events(data)(dispatch)
+                setTimeout(async ()=>{
+                    if(loggedIn){
+                        await lastEventData();
+                    }
+                },3000)
+            }
+        };
+    }
+    useEffect(()=>{
+        if(loggedIn){
+            lastEventData();
+        }
+    },[
+        loggedIn
+    ])
 
     if (!loggedIn) return <Navigate to="/login" replace />
     return <>

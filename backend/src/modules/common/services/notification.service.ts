@@ -6,10 +6,12 @@ import { User } from 'src/models/user.model';
 import { conditionWapper } from 'src/utils/common.functions';
 import { NotificationInterface, NotificationStatus, NotificationType } from 'src/utils/custome.datatypes';
 import { FindManyOptions, Repository } from 'typeorm';
+import { GlobalService } from './global.service';
 
 @Injectable()
 export class NotificationService {
-    constructor(@InjectRepository(Notification) private readonly _notification: Repository<Notification>) { }
+    constructor(@InjectRepository(Notification) private readonly _notification: Repository<Notification>,
+        private readonly globalService: GlobalService) { }
 
 
     async userNotifications(user_id, limit = 10, type: NotificationType): Promise<Notification[]> {
@@ -63,6 +65,13 @@ export class NotificationService {
     }
 
     createBatchNotification(notifications: NotificationInterface<User>[]) {
+        let userObj = {};
+        for(let d of notifications){
+            userObj[d.user.id] = null;
+        }
+        for(let user_id of Object.keys(userObj)){
+            this.globalService.updatedNotification(Number(user_id), 'notificationUpdate', true);
+        }
         const createData = notifications.map(data => this._notification.create(data));
         return this._notification.save(createData);
     }

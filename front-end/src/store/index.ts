@@ -8,6 +8,7 @@ import rolesSlice from './roles.store';
 import permissionSlice from './permissions.store';
 import ticketSlice from './tickets.store';
 import dashboardSlice from './dashboard.store';
+import eventsSlice from './events.store';
 export const rootStore = configureStore({
   reducer: {
     auth: authSlice,
@@ -18,8 +19,9 @@ export const rootStore = configureStore({
     permissions: permissionSlice,
     tickets: ticketSlice,
     dashboard: dashboardSlice,
+    events: eventsSlice
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 
