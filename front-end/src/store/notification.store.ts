@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationStateInterface } from '../utils/common.interfaces';
 import { AuthApiService } from '../services/auth-api.service';
 import appConst from '../constants/app.const';
-import { clearCookie, getCookie, setCookie } from '../utils/common.functions';
 import { ResponseType } from '../utils/contome.datatype';
 import moment from 'moment';
 import { authActions } from './auth-store.store';
