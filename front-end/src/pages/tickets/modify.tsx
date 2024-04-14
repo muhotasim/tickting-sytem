@@ -100,7 +100,9 @@ const ModifyTicket = () => {
                         <div className="mt-15">
                         {formData.attachments.map((attachent, index)=>{
                             return <div className="mt-15 flex" style={{gap: '1rem'}}>
-                               <div><p><strong>File: </strong>{attachent?.name ?? ('File '+(index+1))}</p></div> <button className="btn btn-sm btn-primary"><i className="fa fa-trash" onClick={e=>{removeAttachment(index)}}></i></button>
+                               <div><p><strong>File: </strong>{attachent?.name ?? ('File '+(index+1))}</p></div> <button className="btn btn-sm btn-primary"><i className="fa fa-trash" onClick={e=>{
+                                e.preventDefault()
+                                removeAttachment(index)}}></i></button>
                             </div>
                         })}
                         </div>

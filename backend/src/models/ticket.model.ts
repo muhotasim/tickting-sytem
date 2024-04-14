@@ -23,7 +23,7 @@ export class Ticket {
     @Column()
     submission_date: Date;
 
-    @Column()
+    @Column({default: null, nullable: true})
     resolved_date: Date;
 
     @ManyToOne(() => User, user => user.assigned_tickets)

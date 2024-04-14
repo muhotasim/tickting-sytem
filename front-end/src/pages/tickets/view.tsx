@@ -53,7 +53,9 @@ const ViewTicket = () => {
 
     useEffect(() => {
         ticketsActions.ticketDetails(Number(id))(dispatch)
-    }, [])
+
+        window.scrollTo({top: 0})
+    }, [id])
 
     return <div className='page dashboard-page animate-fade-in'>
         {isLoading&&<p className="text-center"><i className="fa fa-sync fa-spin"></i> please wait</p>}

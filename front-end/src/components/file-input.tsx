@@ -33,6 +33,7 @@ const FileInput:React.FC<FileInputInterface> = ({value, onChange}:FileInputInter
     <input type="text" className="input" value={fileName} readOnly/>
     <button className="upload btn btn-md" onClick={(e)=>{ 
         e.preventDefault()
+        e.stopPropagation()
         if(fileInputRef.current) fileInputRef.current.click()
      }}><i className="fa fa-upload"></i> Upload</button>
     {value&&<button className="clear btn btn-md btn-default" onClick={(e)=>{
